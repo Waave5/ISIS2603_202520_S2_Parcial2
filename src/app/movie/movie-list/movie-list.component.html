@@ -1,35 +1,56 @@
-<div>
-  <div>
-    @if (selected) {
-    <div *ngIf="selected">
-      <app-movie-detail [movie]="selectedMovie"></app-movie-detail>
-    </div>
-    }
-    <table>
-      <thead>
-        <tr>
-          <th>Titulo</th>
-          <th>Imagen</th>
-          <th>Duracion en minutos</th>
-          <th>Director</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for(movie of movies; track movie.id){
-        <tr (click)="onSelect(movie)">
-          <td>{{ movie.titulo }}</td>
-          <td>
-            <img
-              class="movie-img"
+<div class="container">
+  <h2>Películas</h2>
+
+  <div class="movies-background">
+
+    <div class="movies-container">
+
+      <div *ngFor="let movie of movies" class="movie-card">
+
+        <div class="movie-header">
+          <h3 class="movie-title">{{ movie.titulo }}</h3>
+        </div>
+
+        <div class="movie-content">
+          
+          <div class="movie-image">
+            <img 
               [src]="movie.poster"
-              alt="{{ movie.poster }}"
+              [alt]="movie.titulo"
+              class="movie-img"
             />
-          </td>
-          <td>{{ movie.duracion_minutos }} min</td>
-          <td>{{ movie.director }} </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+          </div>
+
+          <div class="movie-details">
+            <div class="detail-item">
+              <span>{{ movie.duracion_minutos }} min</span>
+            </div>
+
+            <div class="detail-item">
+              <span>Director: {{ movie.director }}</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="movie-actions">
+          <button 
+            class="btn btn-primary btn-view"
+            
+            (click)="verPelicula(movie)">
+            Ver película completa
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
+
+  <!-- Detalle -->
+  <div *ngIf="selectedMovie" class="detail-container">
+    <app-movie-detail [movie]="selectedMovie"></app-movie-detail>
+  </div>
+
 </div>

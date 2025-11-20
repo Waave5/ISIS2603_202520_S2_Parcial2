@@ -1,5 +1,8 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { MovieService } from '../movie.service';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-movie-detail',
@@ -11,10 +14,17 @@ export class MovieDetailComponent implements OnInit, OnChanges {
   @Input() movie: any;
   safeTrailerUrl: SafeResourceUrl | null = null;
 
-  constructor(private sanitizer: DomSanitizer) { }
+  constructor(private sanitizer: DomSanitizer, private movieService: MovieService, private route: ActivatedRoute,) { }
 
   ngOnInit(): void {
-    this.updateTrailerUrl();
+    const id = this.route.snapshot.paramMap.get('id')!;
+    this.movieService.getMovie(id).subscribe({
+      next: (data) => {
+        console.log("DETALLE:", data);
+        this.movie = data;
+      },
+      error: (err) => console.error(err)
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Movie } from '../Movie';
-import { movieData } from '../movieData';
+import { MovieService } from '../movie.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-movie-list',
@@ -13,12 +14,22 @@ export class MovieListComponent implements OnInit {
   selected: Boolean = false;
   selectedMovie: Movie | null = null;
 
-  constructor() {}
+  constructor(private movieService: MovieService, private router: Router) {}
 
   ngOnInit() {
-    this.movies = movieData;
+    this.movieService.getMovies().subscribe({
+      next: (data) => {
+        console.log("PELICULAS CARGADAS:", data);
+        this.movies = data;
+      },
+      error: (err) => console.error("ERROR AL CARGAR RECETAS:", err)
+    });
   }
 
+  verPelicula(movie: Movie) {
+  this.selectedMovie = movie;
+}
+  
   onSelect(movie: Movie) {
     this.selectedMovie = movie;
     this.selected = true;
